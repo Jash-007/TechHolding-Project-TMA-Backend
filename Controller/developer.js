@@ -10,10 +10,16 @@ const getdev =(req,res)=>{
         res.send(result.rows);
     })
 }
-
+const getyrole=(req,res)=>{
+    const {drole}=req.params;
+    pool.query(query.veiwbyrole,[drole],(err,result)=>{
+        if(err) throw err;
+        res.send(result.rows);
+    })
+}
 const addDev=async (req,res)=>{
     try {
-        const { dname, demail, dpass, drole } = req.body;
+        const { demail, dname, dpass, drole } = req.body;
         const hashedPassword = await bcrypt.hash(dpass, 10);
         const result = await pool.query(
            query.addDev, [dname, demail, hashedPassword, drole]
@@ -48,25 +54,7 @@ const login=async (req,res)=>{
     res.status(500).json({ error: 'Internal Server Error' });
 }   
 }
-const verifyToken = (req, res, next) => {
-    console.log("hello");
-    const token = req.header('Authorization');
-    if (!token) {
-        return res.status(401).json({ error: 'Unauthorized - No token provided' });
-    }
-    try {
-        const decoded = jwt.verify(token.replace('Bearer ', ''), jwtkey);
-        req.body.user = decoded;
-        next();
-    } catch (error) {
-        console.error(error);
-        res.status(401).json({ error: 'Unauthorized - Invalid token' });
-    }
-};
-const generateSession = (req, res, next) => {
-    req.session.user = req.user;
-    next();
-};
+
 const getbyid = (req,res)=>{
     const {id}=req.params;
     pool.query(query.viewDevbyId,[id],(err,result)=>{
@@ -117,6 +105,6 @@ module.exports={
     delDev,
     updateDev,
     login,
-    verifyToken,
-    generateSession
+    getyrole
+    
 }

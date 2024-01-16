@@ -5,5 +5,8 @@ route.get('/',cnttask.gettask);
 route.post('/',cnttask.addtask);
 route.get('/:id',cnttask.getbyid);
 route.delete('/:id',cnttask.deltask);
-route.put('/:id',cnttask.updatetask);
+route.put('/update/:id',cnttask.updatetask);
+// route.get('/task/:did/:id',cnttask.getTaskByUserId);
+route.get('/user/:did',cnttask.getalltaskbyuserid);
 module.exports=route;
+
