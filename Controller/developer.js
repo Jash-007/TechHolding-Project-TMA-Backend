@@ -24,11 +24,9 @@ const addDev=async (req,res)=>{
         const result = await pool.query(
            query.addDev, [dname, demail, hashedPassword, drole]
         );
-        const user = result.rows[0];
-        const token = jwt.sign({ email: demail,name: dname }, jwtkey);
-        res.header('Authorization', `Bearer ${token}`);
+       
         
-        res.status(201).json({ user, token });
+        res.status(201).json(result.rows);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -46,9 +44,10 @@ const login=async (req,res)=>{
     if (!isPasswordValid) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const token = jwt.sign({ email: user.demail,name:user.dname }, jwtkey, { expiresIn: '1h' });
-    res.header('Authorization', `Bearer ${token}`);
-    res.status(200).json({ user, token });
+    const token = jwt.sign({ email: user.demail }, jwtkey);
+    console.log(token);
+     res.header('Authorization', `Bearer ${token}`);
+    res.status(200).json({ user });
 } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
