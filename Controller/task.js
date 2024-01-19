@@ -63,16 +63,16 @@ const getalltaskbyuserid =(req,res)=>{
         res.send(result.rows);
     })
 }
-const updatetask = (req, res) => {
-    const { id } = req.params;
-    const { tname, tdesc, tstart, tend, did } = req.body;
-    pool.query(query.viewbyId, [id], (err, result) => {
-        const nfnd = !result.rows.length;
-        if (nfnd) {
+const updatetask =async (req, res) => {
+    const { tid } = req.params;
+    const { tname, tdesc, tstatus, dname, did } = req.body;
+    await pool.query(query.viewbyId, [tid], (err, result) => {
+        const nfnd = result.rows.length;
+        if (!nfnd) {
             res.send("std not fond");
         }
         else {
-            pool.query(query.updatetask, [tname, tdesc, tstart, tend, did, id], (err, result) => {
+            pool.query(query.updatetask, [tname, tdesc, tstatus, dname, did, tid], (err, result) => {
                 if (err) throw err;
                 res.send(result);
             })

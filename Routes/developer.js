@@ -5,8 +5,8 @@ const authmiddleware=  require('../Middleware/authorize')
 const admin=require('../Middleware/admin');
 route.post('/login',cntdev.login)
 route.use(authmiddleware.verifyToken);
-route.get('/', cntdev.getdev);
-route.post('/',authmiddleware.verifyToken,admin.isadmin,cntdev.addDev);
+route.get('/',admin.isadmin,cntdev.getdev);
+route.post('/',cntdev.addDev);
 // Router.get('/:drole',cntdev.getyrole)
 route.get('/:id',cntdev.getbyid)
 route.delete('/:id',cntdev.delDev)

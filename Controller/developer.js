@@ -22,7 +22,7 @@ const addDev=async (req,res)=>{
         const { demail, dname, dpass, drole } = req.body;
         const hashedPassword = await bcrypt.hash(dpass, 10);
         const result = await pool.query(
-           query.addDev, [dname, demail, hashedPassword, drole]
+           query.addDev, [demail, dname, hashedPassword, drole]
         );
        
         
@@ -40,14 +40,15 @@ const login=async (req,res)=>{
         return res.status(401).json({ error: 'Invalid credentials!!!!!!!!!!!!!' });
     }
     const user = result.rows[0];
+    console.log(user);
     const isPasswordValid = await bcrypt.compare(dpass, user.dpass);
     if (!isPasswordValid) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
     const token = jwt.sign({ email: user.demail }, jwtkey);
     console.log(token);
-     res.header('Authorization', `Bearer ${token}`);
-    res.status(200).json({ user });
+     
+    res.status(200).json({ user,token });
 } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
