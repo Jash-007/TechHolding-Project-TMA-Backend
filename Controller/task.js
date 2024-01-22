@@ -79,6 +79,18 @@ const updatetask =async (req, res) => {
         }
     })
 }
+const viewAll = async(req,res)=>{
+    await pool.query(query.viewall, (err, result) => {
+        if (err) throw err;
+        res.send({results: result});
+    })
+}
+const count =async(req,res)=>{
+    await pool.query(query.count, (err, result) => {
+        if (err) throw err;
+        res.send({results: result});
+    })
+}
 module.exports = {
     gettask,
     addtask,
@@ -86,5 +98,7 @@ module.exports = {
     deltask,
     updatetask,
     getTaskByUserId,
-    getalltaskbyuserid 
+    getalltaskbyuserid,
+    viewAll,
+    count 
 }

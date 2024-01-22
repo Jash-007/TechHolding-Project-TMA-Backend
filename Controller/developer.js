@@ -4,10 +4,16 @@ const bcrypt = require('bcryptjs')
 const jwtkey="hahahahaha"
 
 const jwt = require('jsonwebtoken');
-const getdev =(req,res)=>{
-    pool.query(query.viewDev,(err,result)=>{
+const getdev =async (req,res)=>{
+    await pool.query(query.viewDev,(err,result)=>{
         if(err) throw err;
-        res.send(result.rows);
+        res.send({results: result});
+    })
+}
+const count=async(req,res)=>{
+    await pool.query(query.count,(err,result)=>{
+        if(err) throw err;
+        res.send({results: result});
     })
 }
 const getyrole=(req,res)=>{
@@ -98,6 +104,12 @@ const updateDev=(req,res)=>{
     }
 })
 }
+const countadmin=async(req,res)=>{
+    await pool.query(query.countadmin,(err,result)=>{
+        if(err) throw err;
+        res.send({results: result});
+    })
+}
 module.exports={
     getdev,
     addDev,
@@ -105,6 +117,7 @@ module.exports={
     delDev,
     updateDev,
     login,
-    getyrole
-    
+    getyrole,
+    count,
+    countadmin
 }
