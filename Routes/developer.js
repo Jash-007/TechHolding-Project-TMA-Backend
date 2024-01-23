@@ -7,11 +7,12 @@ route.post('/login',cntdev.login)
 route.get('/count',cntdev.count)
 route.get('/countadmin',cntdev.countadmin)
 route.use(authmiddleware.verifyToken);
-route.get('/',admin.isadmin,cntdev.getdev);
-route.post('/',cntdev.addDev);
+route.get('/viewless',cntdev.viewless);
+route.get('/viewall',cntdev.getdev);
+route.post('/add',cntdev.addDev);
 // Router.get('/:drole',cntdev.getyrole)
-route.get('/:id',cntdev.getbyid)
-route.delete('/:id',cntdev.delDev)
-route.put('/:id',cntdev.updateDev)
+route.get('/viewbyid/:id',cntdev.getbyid)
+route.delete('/deldev/:id',cntdev.delDev)
+route.put('/update/:id',cntdev.updateDev)
 // route.get('/verifytoken',cntdev.verifyToken,cntdev.getdev);
 module.exports=route;

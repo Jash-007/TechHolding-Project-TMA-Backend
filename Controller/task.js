@@ -56,15 +56,18 @@ async function getTaskByUserId(req, res) {
             .json({ message: "Internal Server Error", errorMessage: error.message });
     }
 } 
-const getalltaskbyuserid =(req,res)=>{
+const getalltaskbyuserid =async (req,res)=>{
     const { did } = req.params;
-    pool.query(query.getalltaskbyuserid, [did], (err, result) => {
+    console.log(did);
+    await pool.query(query.getalltaskbyuserid, [did], (err, result) => {
         if (err) throw err;
         res.send(result.rows);
     })
 }
 const updatetask =async (req, res) => {
     const { tid } = req.params;
+    console.log(req.params)
+    console.log(req.body);
     const { tname, tdesc, tstatus, dname, did } = req.body;
     await pool.query(query.viewbyId, [tid], (err, result) => {
         const nfnd = result.rows.length;

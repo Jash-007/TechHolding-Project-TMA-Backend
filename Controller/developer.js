@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwtkey="hahahahaha"
 
 const jwt = require('jsonwebtoken');
+const { use } = require('../Routes/developer.js');
 const getdev =async (req,res)=>{
     await pool.query(query.viewDev,(err,result)=>{
         if(err) throw err;
@@ -26,6 +27,7 @@ const getyrole=(req,res)=>{
 const addDev=async (req,res)=>{
     try {
         const { demail, dname, dpass, drole } = req.body;
+        console.log(demail,dname,dpass,drole);
         const hashedPassword = await bcrypt.hash(dpass, 10);
         const result = await pool.query(
            query.addDev, [demail, dname, hashedPassword, drole]
@@ -68,9 +70,20 @@ const getbyid = (req,res)=>{
         res.send(result.rows);
     })
 }
-const delDev =(req,res)=>{
-    const {id}=req.params;
-    pool.query(query.viewDevbyId,[id],(err,result)=>{
+const viewless= async (req,res)=>{
+    try {
+        const result = await pool.query(query.viewless);
+        res.send({results: result.rows});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+const delDev =async (req,res)=>{
+    const { id }=req.params;
+    console.log(id);
+   await pool.query(query.viewDevbyId,[id],(err,result)=>{
+    console.log(result);
         const nfnd=result.rows.length;
         if(!nfnd) {
         res.send("std not fond");
@@ -119,5 +132,6 @@ module.exports={
     login,
     getyrole,
     count,
-    countadmin
+    countadmin,
+    viewless
 }

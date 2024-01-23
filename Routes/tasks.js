@@ -6,7 +6,7 @@ route.get('/count',cnttask.count)
 route.get('/',cnttask.gettask);
 route.post('/add',cnttask.addtask);
 route.get('/viewbyId/:id',cnttask.getbyid);
-route.delete('/:id',cnttask.deltask);
+route.delete('/deltask/:id',cnttask.deltask);
 route.put('/update/:id',cnttask.updatetask);
 // route.get('/task/:did/:id',cnttask.getTaskByUserId);
 route.get('/user/:did',cnttask.getalltaskbyuserid);
