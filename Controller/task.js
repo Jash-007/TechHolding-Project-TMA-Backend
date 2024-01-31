@@ -2,43 +2,52 @@ const pool = require('../config.js')
 
 const query =  require('../Queries/task.js')
 
-const gettask = async (req, res) => {
-    await pool.query(query.viewtask, (err, result) => {
-        if (err) throw err;
+const getTask = async (req, res) => {
+    try {
+        const result=await pool.query(query.viewTask);
         res.send({results: result});
-    })
+    } catch (error) {
+        res.status(500).json({error: "Internal Server"});
+    }
 }
-const addtask =async (req, res) => {
+const addTask =async (req, res) => {
     const { tname, tdesc, tstatus, dname, did } = req.body;
-    await pool.query(query.addtask, [tname, tdesc, tstatus, dname, did], (err, result) => {
-        if (err) throw err;
+    try {
+        const result=await pool.query(query.addTask, [tname, tdesc, tstatus, dname, did]);
         res.send(result.rows);
-    })
+    } catch (error) {
+        res.status(500).json({error: "Internal Server"});
+    }
+}
+//API call return task by its Id
+const getById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result= await pool.query(query.viewById, [id])
+        res.send(result.rows);
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
 
-const getbyid = async (req, res) => {
+const delTask = async (req, res) => {
     const { id } = req.params;
-    await pool.query(query.viewbyId, [id], (err, result) => {
-        if (err) throw err;
-        res.send(result.rows);
-    })
-}
-
-const deltask = async (req, res) => {
-    const { id } = req.params;
-    await pool.query(query.viewbyId, [id], (err, result) => {
-        const nfnd = result.rows.length;
-        if (!nfnd) {
-            res.send("std not fond");
+    try {
+        const idPresent=await pool.query(query.viewById, [id])
+        if(!idPresent){
+            res.status(404).json({
+                message: "resource does not found!",
+            });
+            return
         }
-        else {
-            pool.query(query.deltask, [id], (err, result) => {
-                if (err) throw err;
-                res.send(result.rows);
-                //return;
-            })
+        else{
+            pool.query(query.delTask, [id])
+            res.send(result.rows);
+            return;
         }
-    })
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
 async function getTaskByUserId(req, res) {
     const { id, did } = req.params;
@@ -51,57 +60,64 @@ async function getTaskByUserId(req, res) {
         }
         return res.status(200).json(records.rows);
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: "Internal Server Error", errorMessage: error.message });
+        return res.status(500).json({ message: "Internal Server Error", errorMessage: error.message });
     }
 } 
-const getalltaskbyuserid =async (req,res)=>{
-    const { did } = req.params;
-    console.log(did);
-    await pool.query(query.getalltaskbyuserid, [did], (err, result) => {
-        if (err) throw err;
+const getAllTaskByUserId =async (req,res)=>{
+    const  did  = req.params.did;
+    // console.log(req.params.did);
+    try {
+        const result=await pool.query(query.getAllTaskByUserId, [did])
+        // console.log(result);
         res.send(result.rows);
-    })
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
-const updatetask =async (req, res) => {
+const updateTask =async (req, res) => {
     const { tid } = req.params;
-    console.log(req.params)
-    console.log(req.body);
     const { tname, tdesc, tstatus, dname, did } = req.body;
-    await pool.query(query.viewbyId, [tid], (err, result) => {
-        const nfnd = result.rows.length;
-        if (!nfnd) {
-            res.send("std not fond");
+    try {
+        const idPresent= await pool.query(query.viewById, [tid]) 
+        if(!idPresent){
+            res.status(404).json({
+                message: "resource does not found!",
+            });
+            return
         }
-        else {
-            pool.query(query.updatetask, [tname, tdesc, tstatus, dname, did, tid], (err, result) => {
-                if (err) throw err;
-                res.send(result);
-            })
+        else{
+            const result=await pool.query(query.updateTask, [tname, tdesc, tstatus, dname, did, tid])
+            res.send(result);
+            return
         }
-    })
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
 const viewAll = async(req,res)=>{
-    await pool.query(query.viewall, (err, result) => {
-        if (err) throw err;
+    try {
+        const result=await pool.query(query.viewAll)
         res.send({results: result});
-    })
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
-const count =async(req,res)=>{
-    await pool.query(query.count, (err, result) => {
-        if (err) throw err;
+const countTask =async(req,res)=>{
+    try {
+        const result=await pool.query(query.countTask)   
         res.send({results: result});
-    })
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
 }
 module.exports = {
-    gettask,
-    addtask,
-    getbyid,
-    deltask,
-    updatetask,
+    getTask,
+    addTask,
+    getById,
+    delTask,
+    updateTask,
     getTaskByUserId,
-    getalltaskbyuserid,
+    getAllTaskByUserId,
     viewAll,
-    count 
+    countTask 
 }

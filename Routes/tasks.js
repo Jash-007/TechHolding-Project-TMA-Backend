@@ -1,14 +1,13 @@
-const { Router } = require('express')
-const route=  Router();
-const cnttask = require('../Controller/task');
-route.get('/view',cnttask.viewAll);
-route.get('/count',cnttask.count)
-route.get('/',cnttask.gettask);
-route.post('/add',cnttask.addtask);
-route.get('/viewbyId/:id',cnttask.getbyid);
-route.delete('/deltask/:id',cnttask.deltask);
-route.put('/update/:id',cnttask.updatetask);
-// route.get('/task/:did/:id',cnttask.getTaskByUserId);
-route.get('/user/:did',cnttask.getalltaskbyuserid);
-module.exports=route;
-
+const { Router } = require("express");
+const route = Router();
+const cntTask = require("../Controller/task");
+route.get("/view", cntTask.viewAll);
+route.get("/count", cntTask.countTask);
+route.get("/", cntTask.getTask);
+route.post("/add", cntTask.addTask);
+route.get("/viewbyId/:id", cntTask.getById);
+route.delete("/deltask/:id", cntTask.delTask);
+route.put("/update/:id", cntTask.updateTask);
+// route.get('/task/:did/:id',cntTask.getTaskByUserId);
+route.get("/user/:did", cntTask.getAllTaskByUserId);
+module.exports = route;

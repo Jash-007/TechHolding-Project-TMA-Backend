@@ -1,20 +1,18 @@
-const Pool = require('pg').Pool
+const Pool = require("pg").Pool;
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "ManagementApp",
-    password: "Jash@123",
-    port: 5432
-})
+  user: process.env.user,
+  host: process.env.host,
+  database: process.env.database,
+  password: process.env.password,
+  port: process.env.dbport,
+});
 
 pool.on("connect", () => {
   console.log("Connected to the database");
 });
-module.exports=pool
+module.exports = pool;
 // pool.end().then(() => console.log("Connection pool closed"))
 // .catch((err) => console.error("Error closing connection pool", err));
-
-
 
 // function remove(params) {
 //   // Event listener for client disconnection

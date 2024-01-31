@@ -1,18 +1,18 @@
-const { Router } = require('express')
-const route=  Router();
-const cntdev = require('../Controller/developer');
-const authmiddleware=  require('../Middleware/authorize')
-const admin=require('../Middleware/admin');
-route.post('/login',cntdev.login)
-route.get('/count',cntdev.count)
-route.get('/countadmin',cntdev.countadmin)
-route.use(authmiddleware.verifyToken);
-route.get('/viewless',cntdev.viewless);
-route.get('/viewall',cntdev.getdev);
-route.post('/add',cntdev.addDev);
-// Router.get('/:drole',cntdev.getyrole)
-route.get('/viewbyid/:id',cntdev.getbyid)
-route.delete('/deldev/:id',cntdev.delDev)
-route.put('/update/:id',cntdev.updateDev)
-// route.get('/verifytoken',cntdev.verifyToken,cntdev.getdev);
-module.exports=route;
+const { Router } = require("express");
+const route = Router();
+const cntDev = require("../Controller/developer");
+const authMiddleware = require("../Middleware/authorize");
+const admin = require("../Middleware/admin");
+route.post("/login", cntDev.login);
+route.get("/count", cntDev.countDev);
+route.get("/countadmin", cntDev.countAdmin);
+route.use(authMiddleware.verifyToken);
+route.get("/viewless", cntDev.viewLess);
+route.get("/viewall", cntDev.getDev);
+route.post("/add", cntDev.addDev);
+// Router.get('/:drole',cntDev.getyrole)
+route.get("/viewbyid/:id", cntDev.getById);
+route.delete("/deldev/:id", cntDev.delDev);
+route.put("/update/:id", cntDev.updateDev);
+// route.get('/verifytoken',cntDev.verifyToken,cntDev.getdev);
+module.exports = route;
