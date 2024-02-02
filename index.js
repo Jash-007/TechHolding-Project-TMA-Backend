@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const cors = require("cors");
-const dotenv=require("dotenv");
-dotenv.config({path :'.env'});
+const dotenv = require("dotenv");
+dotenv.config({ path: ".env" });
 app.use(cors());
 app.use(express.json());
 const port = process.env.PORT;
@@ -15,8 +15,8 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use("/api/dev", require("./Routes/developer"));
-app.use("/api/task", require("./Routes/tasks"));
+app.use("/api/dev/v1", require("./Routes/developer"));
+app.use("/api/task/v1", require("./Routes/tasks"));
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
